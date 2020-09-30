@@ -1,0 +1,1 @@
+function windowOpen(url){location.href = url;}function goArtistTitle(element, area, titleId, index, event) {nclk_v2(event,area,'',index);return artistAction.viewArtist(titleId, element);}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Dynamic Crawler</title>
+    <style>
+        #URL {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            font-size: 100px;
+            transition: all .35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            border-bottom: 3px solid black;
+            text-align: center;
+        }
+        #URL:focus {
+            outline: none;
+            border-color: blue;
+        }
+        #button {
+            width: 200px;
+            height: 55px;
+            border: 1px solid black;
+            border-radius: 20px;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #button:hover {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <input id="URL" type="text"/>
+    <div id="button"></div>
+    <script>
+        $(document).ready(() => {
+            $("#button").click(() => {
+                var url = document.getElementById("URL").value;
+                axios.post("/getData", {url})
+                .then(() => {
+                    alert("SENT");
+                    // location.href=`/siteData?url=${url.replace("http://", "")}`;
+                })
+                .catch((e) => alert("ERR", e));
+            })
+        })
+    </script>
+</body>
+</html>
