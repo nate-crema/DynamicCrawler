@@ -1,3 +1,0 @@
-
-		document.domain = "naver.com";
-	

@@ -1,0 +1,1240 @@
+
+
+
+
+
+
+
+
+
+	
+	
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>안산시 중앙도서관</title>
+
+
+
+
+
+
+
+
+
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+<!-- css -->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic" rel="stylesheet">
+<link rel="stylesheet" href="css/normalize.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="css/common.css?20190620" />
+<!-- js -->
+
+<script type="text/javascript" src="/dext5/js/dext5editor.js"></script>
+<script type="text/javascript" src="/js/dext5/common.js?v=180726_2"></script>
+
+<script src="/js/jquery/1.11.1/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<!--[if lt IE 9]>
+<script src="js/jquery.placeholder.js"></script>
+<script src="js/respond.src.js"></script>
+<script src="js/ie8.js"></script>
+<script src="js/html5.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#sitekey").val('1');
+	$("#sitekey0").val('1');
+	$("#sitekey1").val('1');
+	$("#sitekey2").val('1');
+	$("#iLibkey").val('1').attr("disabled", "disabled");
+	
+	$("#srcYear").val('2020');
+	$("#srcMonth").val('10');
+
+	//접근성 포커스
+	var access = '';
+	if( access != "" ){
+		$("#"+access).focus();
+	}
+});
+
+function getSaveId()
+{
+	var saveId = window.localStorage.getItem("saveId");
+	var userId = window.localStorage.getItem("userId");
+	
+	if (saveId == "Y")
+	{
+		document.loginForm.keepId.checked = true;
+		document.loginForm.userid.value = userId;
+	}
+}
+
+function form_ck() 
+{
+	var saveId = document.loginForm.keepId.checked;
+	var userId = document.loginForm.userid.value;
+	var passWd = document.loginForm.password.value;
+	var chkSSL = document.loginForm.chkSSL.checked;
+
+	if(userId =="")
+	{
+		alert("ID를 입력해주세요");
+        loginForm.userid.focus();
+        return false;
+    }
+	
+	if(passWd =="") 
+	{
+         alert("비밀번호를 입력해주세요");
+         loginForm.password.focus();
+         return false;
+    }
+	
+	if (saveId)
+	{
+		window.localStorage.setItem("saveId", "Y");
+		window.localStorage.setItem("userId", userId);
+	}
+	else
+	{
+		window.localStorage.removeItem("saveId");
+		window.localStorage.removeItem("userId");
+	}
+	
+	$("#userid").val();
+	$("#password").val();
+	
+	if(chkSSL){
+  	$("#loginForm").attr("action","https://lib.ansan.go.kr/login.do").submit();
+  }else{
+  	$("#loginForm").attr("action","/login.do").submit();
+  }
+}
+
+function fnBookSrc(){
+	if($.trim($("#srcWord").val()).length == 0){
+		alert("검색어를 입력해주십시오.");
+		return;
+	}
+	
+	$("#bookSearch").attr("action", "/detailDataSearchList.do").submit();
+}
+
+function goLibrary(idx){
+	var szDate = new Date();
+
+	// Display the month, day, and year. getMonth() returns a 0-based number.
+	var szMonth = szDate.getMonth()+1;
+	var szYear = szDate.getFullYear();
+	$("#sitekey1").val(idx);
+	$("#srcYear").val(szYear);
+	$("#srcMonth").val(szMonth);
+	$("#goLibrary").attr("action","/main.do").submit();
+}
+
+function goMinLibrary(idx){
+	$("#minisitekey").val(idx);
+	$("#goLibrary").attr("action","/minLib.do").submit();
+}
+
+function beforeMonthlyInfo(){
+	var srcBeforeYear = Number($("#srcYear").val());
+	var srcBeforeMonth = Number($("#srcMonth").val())-1;
+	if(srcBeforeMonth < 1){
+		srcBeforeYear = srcBeforeYear-1;
+		srcBeforeMonth = 12;
+	}
+	
+	$("#srcYear").val(srcBeforeYear);
+	$("#srcMonth").val(srcBeforeMonth);
+	$("#access").val("btn_before_mon");
+	$("#goLibrary").attr("action","/main.do").submit();
+}
+
+function nextMonthlyInfo(){
+	var srcNextYear = Number($("#srcYear").val());
+	var srcNextMonth = Number($("#srcMonth").val())+1;
+	if(srcNextMonth > 12){
+		srcNextYear = srcNextYear+1;
+		srcNextMonth = 1;
+	}
+	
+	$("#srcYear").val(srcNextYear);
+	$("#srcMonth").val(srcNextMonth);
+	$("#access").val("btn_next_mon");
+	$("#goLibrary").attr("action","/main.do").submit();
+}
+
+function fnNoticeDetail(fn_seq, gwan){
+	$("#fn_seq").val(fn_seq);
+	$("#gwan1").val(gwan);
+	$("#goLibrary").attr("action", "/noticeP.do").submit();
+}
+function fnLectureDetail(sitekey1){
+	$("#sitekey1").val(sitekey1);
+	$("#goLibrary").attr("action", "/culturalclass.do").submit();
+}
+function fnComplimentDetail(fn_seq, gwan){
+	$("#fn_seq").val(fn_seq);
+	$("#gwan1").val(gwan);
+	$("#goLibrary").attr("action", "/complimentP.do").submit();
+}
+function goBook(seq){
+	$("#bookSeq").val(seq);
+	$("#sitekey4").val('1' );
+	$("#goBookList").attr("action", "/monthrecommendreading.do").submit();
+}
+</script>
+</head>
+<body onLoad = "getSaveId()">
+<a href="#container" class="skip" onclick="jQuery('#container a:first').focus();return false;">Skip to Content</a> 
+
+
+
+<form name="goLibraryWay" id="goLibraryWay" method="post">
+	<input type="hidden" id="sitekey10" name="sitekey10" />
+</form>	
+<div id="snb" class="side_nav mypage">
+	<header>
+		<h1>전체메뉴</h1>
+		<button type="button" class="no_style fa fa-times fr" onClick="menuClose();"><span class="blind">Close</span></button>
+	</header>
+
+	<nav>
+		<ul>
+
+			<li>
+				<a href="javascript:goMenu('newDataSearch.do')">자료검색</a>
+				<ul>
+					<li><a href="javascript:goMenu('newDataSearch.do')">신규자료 검색</a></li>
+					<li><a href="javascript:goMenu('simpleDataSearch.do')">단순자료 검색</a></li>
+					<li><a href="javascript:goMenu('detailDataSearch.do')">상세자료 검색</a></li>
+					<li><a href="javascript:goMenu('bestlendingData.do')">베스트 대출자료</a></li>
+					<!--<li><a href="javascript:goMenu('mutalreserveguide.do')">상호대차/통합반납</a></li>-->
+					<li><a href="javascript:goMenu('outsideLink.do')">외부기관 링크</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('monthlyevent.do')">문화행사</a>
+				<ul>
+					<li><a href="javascript:goMenu('monthlyevent.do')">월중행사</a></li>
+					<li><a href="javascript:goMenu('culturalclass.do')">문화강좌</a></li>
+					<li><a href="javascript:goMenu('filmscreening.do')">영화상영</a></li>
+					<li><a href="javascript:goMenu('readingquiz.do')">독서퀴즈</a></li>
+					<li><a href="javascript:goMenu('culturalclassgallary.do')">문화행사 갤러리</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('notice.do')">열린공간</a>
+				<ul>
+					<li><a href="javascript:goMenu('notice.do')">공지사항</a></li>
+					<li><a href="javascript:goMenu('wishtolibrary.do')">도서관에 바란다</a></li>
+					<li><a href="javascript:goMenu('compliment.do')">칭찬합시다</a></li>
+					<li><a href="javascript:goMenu('freeboard.do')">자유게시판</a></li>
+					<li><a href="javascript:goMenu('research.do')">설문조사</a></li>
+					<li><a href="javascript:goMenu('myrecommendbook.do')">나의 추천도서</a></li>
+					<li><a href="javascript:goMenu('formdownload.do')">서식 다운로드</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('widelyservice.do')">찾아가는 도서관</a>
+				<ul>
+					<li><a href="javascript:goMenu('widelyservice.do')">두루두루 서비스</a></li>
+					<li><a href="javascript:goMenu('bookservice.do')">책바다 서비스</a></li>
+					<li><a href="javascript:goMenu('firstlibrary.do')">내 생애 첫 도서관</a></li>
+					<li><a href="javascript:goMenu('bookstart.do')">북스타트</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('wishbookapply.do')">온라인 서비스</a>
+				<ul>
+					<li><a href="javascript:goMenu('wishbookapply.do')">희망도서 신청</a></li>
+					<li><a title="새창으로열림" href="javascript:baroloan('');">지역서점 바로 대출</a></li>
+					<li><a href="javascript:goMenu('volunteerapply.do')">자원봉사 신청</a></li>
+					<li><a href="javascript:goMenu('librarytourapply.do')">도서관 견학신청.</a></li>
+					
+					<li><a href="javascript:goMenu('lockerapply.do')">사물함 신청</a></li>
+					
+					
+					<li><a href="javascript:alert('로그인 후 이용하여 주십시오.');">디지털 자료실 예약</a></li>
+					<li><a href="javascript:alert('로그인 후 이용하여 주십시오.');">전자책</a></li>
+					
+
+					
+					<li><a href="javascript:goMenu('dbpiaapply.do')">전자저널</a></li>
+					
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('cityreadingbizguide.do')">안산의 책</a>
+				<ul>
+					<li><a href="javascript:goMenu('cityreadingbizguide.do')">한 도시 한 책 읽기</a></li>
+					<li><a href="javascript:goMenu('libculturaleventyear.do')">도서관 책 문화축제</a></li>
+					<li><a href="javascript:goMenu('businessguide.do')">하루 10분 독서</a></li>
+					<li><a href="javascript:goMenu('monthrecommendreading.do')">사서추천도서</a></li>
+					<li><a href="javascript:goMenu('readingclubboard.do')">독서동아리</a></li>
+					<li><a href="javascript:goMenu('bookreportinfo.do')">독서감상작 전국공모전</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('multiculturalminilibrary.do')">작은도서관</a>
+				<ul>
+					<li><a href="javascript:goMenu('multiculturalminilibrary.do')">공립작은도서관</a></li>
+					<li><a href="javascript:goMenu('privateminilibary.do')">사립작은도서관</a></li>
+					<li><a href="javascript:goMenu('minilibculturalclassapply.do')">문화행사</a></li>
+					<li><a href="javascript:goMenu('minilibrarynews.do')">작은도서관 소식</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('my.do')">나의 도서관</a>
+				<ul>
+					<li><a href="javascript:goMenu('memberjoin.do')">회원정보수정</a></li>
+					<li><a href="javascript:goMenu('booklendinghistory.do')">대출내역</a></li>
+					<li><a href="javascript:goMenu('eventservicevisithistory.do')">행사/봉사/견학/사물함</a></li>
+					
+					
+					<!--li>
+					
+						<a href="javascript:alert('웹회원만 이용할 수 있습니다.');">회원탈퇴</a>
+					
+					</li-->
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:goMenu('greeting.do')">도서관 소개</a>
+				<ul>
+					<li><a href="javascript:goMenu('greeting.do')">인사말</a></li>
+					<li><a href="javascript:goMenu('libhistory.do')">연혁</a></li>
+					<li><a href="javascript:goMenu('liborganization.do')">조직도</a></li>
+					<li><a href="javascript:goMenu('libstatus.do')">도서관 현황</a></li>
+					
+					<li><a href="javascript:goMenu('facilityguide.do')">도서관 시설안내</a></li>
+					
+					<!-- <li><a href="javascript:goMenu('libgallary.do')">도서관 갤러리</a></li> -->
+					<li><a href="javascript:goMenu('libguide.do')">도서관 이용안내</a></li>
+					<li><a href="javascript:goMenu('libuseretiguette.do')">이용자 에티켓</a></li>
+					<li><a href="javascript:goMenu('libraryway.do')">오시는 길</a></li>
+					<li><a href="javascript:goMenu('faq.do')">자주하는 질문</a></li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+
+<!-- wrap -->
+<div id="wrap" class="clear"> 
+	
+
+<form name="goMenu" id="goMenu" method="get">
+	<input type="hidden" id="sitekey" name="sitekey" />
+	<input type="hidden" id="gwan" name="gwan" />
+	<header id="hd">
+		<a class="icon_mn show_w800" href="#snb" onClick="menuOpen('snb');">메뉴</a>
+		<div class="w1200 clear">
+			<!-- top -->
+			<ul id="top">
+				<li class="hide_w800 font_size">
+					<button type="button" class="icon_font_small" onclick="javascript:zoomIn();return false;">폰트 크기 작게하기</button>
+					<button type="button" class="icon_font_large" onclick="javascript:zoomOut();return false;">폰트 크기 크게하기</button>
+				</li>
+				<li><a href="javascript:goMenu('main.do');">홈</a></li>
+				
+				<li><a href="javascript:goMenu('main.do')">로그인</a></li>
+				<li><a href="javascript:goMenu('signup.do')">회원가입</a></li>
+				<li class="hide_w800"><a href="javascript:goMenu('passwordsearch.do')">아이디/비번찾기</a></li>
+				<li><a href="javascript:goMenu('sitemap.do')">사이트맵</a></li>
+				
+			</ul>
+						
+			<!--h1><a href="javascript:goMenu('main.do')"><img src="/images/logo.png" alt="안산시" />중앙도서관</a></h1-->
+			<h1><a href="javascript:goMenu('main.do')"><img src="/images/logo.png" alt="안산시" />중앙도서관</a></h1>						
+				
+			<!-- gnb -->
+			<nav id="gnb">
+				<ul>
+
+					<li>
+						<a href="javascript:goMenu('newDataSearch.do')">자료검색</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('newDataSearch.do')">신규자료 검색</a></li>
+								<li><a href="javascript:goMenu('simpleDataSearch.do')">단순자료 검색</a></li>
+								<li><a href="javascript:goMenu('detailDataSearch.do')">상세자료 검색</a></li>
+								<li><a href="javascript:goMenu('bestlendingData.do')">베스트 대출자료</a></li>
+								<!--<li><a href="javascript:goMenu('mutalreserveguide.do')">상호대차/통합반납</a></li>-->
+								<li><a href="javascript:goMenu('outsideLink.do')">외부기관 링크</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('monthlyevent.do')">문화행사</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('monthlyevent.do')">월중행사</a></li>
+								<li><a href="javascript:goMenu('culturalclass.do')">문화강좌</a></li>
+								<li><a href="javascript:goMenu('filmscreening.do')">영화상영</a></li>
+								<li><a href="javascript:goMenu('readingquiz.do')">독서퀴즈</a></li>
+								<li><a href="javascript:goMenu('culturalclassgallary.do')">문화행사 갤러리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('notice.do')">열린공간</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('notice.do')">공지사항</a></li>
+								<li><a href="javascript:goMenu('wishtolibrary.do')">도서관에 바란다</a></li>
+								<li><a href="javascript:goMenu('compliment.do')">칭찬합시다</a></li>
+								<li><a href="javascript:goMenu('freeboard.do')">자유게시판</a></li>
+								<li><a href="javascript:goMenu('research.do')">설문조사</a></li>
+								<li><a href="javascript:goMenu('myrecommendbook.do')">나의 추천도서</a></li>
+								<li><a href="javascript:goMenu('formdownload.do')">서식 다운로드</a></li>
+								<!-- <li><a href="javascript:goMenu('newbook.do')">신간도서</a></li> -->
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('widelyservice.do')">찾아가는 도서관</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('widelyservice.do')">두루두루 서비스</a></li>
+								<li><a href="javascript:goMenu('bookservice.do')">책바다 서비스</a></li>
+								<li><a href="javascript:goMenu('firstlibrary.do')">내 생애 첫 도서관</a></li>
+								<li><a href="javascript:goMenu('bookstart.do')">북스타트</a></li>
+								
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('wishbookapply.do')">온라인 서비스</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('wishbookapply.do')">희망도서 신청</a></li>
+								<li><a title="새창으로열림" href="javascript:baroloan('');">지역서점 바로 대출</a></li>
+								<li><a href="javascript:goMenu('volunteerapply.do')">자원봉사 신청</a></li>
+								<li><a href="javascript:goMenu('librarytourapply.do')">도서관 견학신청</a></li>
+								
+								<li><a href="javascript:goMenu('lockerapply.do')">사물함 신청</a></li>
+								
+								
+									
+										<li><a title="새창으로열림" href="javascript:alert('로그인 후 이용하여 주십시오.');">디지털 자료실 예약</a></li>
+										<li><a title="새창으로열림" href="javascript:alert('로그인 후 이용하여 주십시오.');">전자책</a></li>
+										
+  								
+								
+								<li><a href="javascript:goMenu('dbpiaapply.do')">전자저널</a></li>
+								
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('cityreadingbizguide.do')">안산의 책</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('cityreadingbizguide.do')">한 도시 한 책 읽기</a></li>
+								<li><a href="javascript:goMenu('libculturaleventyear.do')">도서관 책 문화축제</a></li>
+								<li><a href="javascript:goMenu('businessguide.do')">하루 10분 독서</a></li>
+								<li><a href="javascript:goMenu('bookcrossingbizguide.do')">북크로싱 독서운동</a></li>
+								<li><a href="javascript:goMenu('monthrecommendreading.do')">사서추천도서</a></li>
+								<li><a href="javascript:goMenu('readingclubboard.do')">독서동아리</a></li>
+								<li><a href="javascript:goMenu('bookreportinfo.do')">독서감상작 전국공모전</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('multiculturalminilibrary.do')">작은도서관</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('multiculturalminilibrary.do')">공립작은도서관</a></li>
+								<li><a href="javascript:goMenu('privateminilibary.do')">사립작은도서관</a></li>
+								<li><a href="javascript:goMenu('minilibculturalclassapply.do')">문화행사</a></li>
+								<li><a href="javascript:goMenu('minilibrarynews.do')">작은도서관 소식</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="javascript:goMenu('greeting.do')">도서관 소개</a>
+						<div>
+							<ul>
+								<li><a href="javascript:goMenu('greeting.do')">인사말</a></li>
+								<li><a href="javascript:goMenu('libhistory.do')">연혁</a></li>
+								<li><a href="javascript:goMenu('liborganization.do')">조직도</a></li>
+								<li><a href="javascript:goMenu('libstatus.do')">도서관 현황</a></li>
+								
+								<li><a href="javascript:goMenu('facilityguide.do')">도서관 시설안내</a></li>
+								
+								<!-- <li><a href="javascript:goMenu('libgallary.do')">도서관 갤러리</a></li> -->
+								<li><a href="javascript:goMenu('libguide.do')">도서관 이용안내</a></li>
+								<li><a href="javascript:goMenu('libuseretiguette.do')">이용자 에티켓</a></li>
+								<li><a href="javascript:goMenu('libraryway.do')">오시는 길</a></li>
+								<li><a href="javascript:goMenu('faq.do')">자주하는 질문</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+</form>	
+<form name="goDigital" id="goDigital" method="post">
+	<input type="hidden" name="Id " value="">
+	<input type="hidden" name="pw" value="">
+	<input type="hidden" name="name" value="">
+	<input type="hidden" name="birth" value="<//%=CommonUtil.getBirthDay(request)%>">
+	<input type="hidden" name="sex" value="">
+</form>
+<form name="goEBook" id="goEBook" method="post" action="https://ebook.ansan.go.kr/coalition.asp">
+	<input type="hidden" name="param_1" value="">
+	<input type="hidden" name="param_2" value="">
+	<input type="hidden" name="param_3" value="">
+	<input type="hidden" name="param_7" value="">
+</form>
+
+<!--form name="goEBook2" id="goEBook2" method="post" action="http://ebook.iansan.net:8080/english/autologin.php"-->
+<form name="goEBook2" id="goEBook2" method="post" action="http://www.selibrary.com/pages/otherdomain/sso_join_web.asp" target="_blank">
+	<input type="hidden" name="userid" value="">
+	<input type="hidden" name="username" value="">
+</form>
+
+<form name="goTrailer" id="goTrailer" method="post" action="http://iansan.mbookpia.com/checkin_exec.asp">
+	<input type="hidden" name="mUserId" value="">
+	<input type="hidden" name="mUserPwd" value="iansan@2755">
+	<input type="hidden" name="mUserName" value="안산시">
+</form>
+
+<script type="text/javascript">
+function goDigitalLib(){
+  /*
+	if(true){
+		alert("로그인 후 이용하실 수 있습니다.");
+		goMenu("main.do");
+		return;
+	}
+	*/
+	var tform = document.goDigital;
+	var sitekey = '1';
+	var action="http://seat.ansan.go.kr:7500";
+	
+	//디폴트 중앙
+	var gourl = "http://seat.ansan.go.kr:7500/nav?id=0";
+	//관산
+	if(sitekey=='2'){
+		//action="http://seat.iansan.net:7800";
+		//action="http://27.101.109.215:7500/nav";
+		//tform.method = "GET";
+		gourl = "http://seat.ansan.go.kr:7500/nav?id=1"
+	}else if(sitekey=='3'){
+		//action="http://seat.iansan.net:7900";
+		//action="http://27.101.109.215:7500/nav";
+		//tform.method = "GET";
+		gourl = "http://seat.ansan.go.kr:7500/nav?id=2" //성포
+	}else if(sitekey=='4'){
+		//action="http://seat.iansan.net:8200";
+		//action="http://27.101.109.215:7500/nav";
+		//tform.method = "GET";
+		gourl = "http://seat.ansan.go.kr:7500/nav?id=3" //감골
+	}else if(sitekey=='1'){
+		//action="http://seat.iansan.net:7700";
+		//action="http://27.101.109.215:7500/nav";
+		//tform.method = "GET";
+		gourl = "http://seat.ansan.go.kr:7500/nav?id=0";
+	}else if(sitekey=='31'){
+		//action="http://27.101.109.215:8401/digital.do?mc=NF";
+		//action="http://27.101.109.215:7500/nav";
+		//tform.method = "GET";
+		gourl = "http://seat.ansan.go.kr:7500/?mc=NF";
+	}
+	//alert(action);
+	//var tform = document.goDigital;
+	//var nWin = window.open('', 'digitalLib');
+	//tform.target="digitalLib";
+	//tform.action=action;
+	//tform.submit();
+	//$("#goDigital").attr("action",action).submit();
+	window.open(gourl, "_blank");
+}
+function goEBooks(){
+	var tform = document.goEBook;
+	var nWin = window.open('', 'eBooks');
+	tform.target="eBooks";
+	//tform.action=action;
+	tform.submit();
+	//$("#goEBook").attr("action","/http://ebook.iansan.net").submit();	
+}
+function goEBooks2(gotype){
+	var tform = document.goEBook2;
+	//var nWin = window.open('', 'eBooks2');
+	//tform.target="_blank";
+	
+	if(gotype=="1"){
+	  tform.action="http://ebook.ansan.go.kr:8080/english/autologin.php";
+	}else{
+	  tform.action="http://www.selibrary.com/pages/otherdomain/sso_join_web.asp";
+	}
+	//tform.action=action;
+	tform.submit();
+	//$("#goEBook").attr("action","/http://ebook.iansan.net").submit();	
+}
+function goTrailer(){
+	var tform = document.goTrailer;
+	var nWin = window.open('', 'BooksTrailer');
+	tform.target="BooksTrailer";
+	tform.submit();
+}
+
+</script>
+	
+	<!-- container #container.screenid -->
+	<div id="container" class="main clear">
+		<!-- content -->
+		<div id="ct">
+<!-- 콘텐츠 시작 -->
+<div id="main" class="w1200 clear">
+	<div class="col2_wrp m_col1_wrp clear main_top">
+		<section class="section main_visual hide_w800">
+			<h2 class="blind">안산중앙도서관</h2>
+			<img src="images/index/1.jpg" alt="세계로 뻗어가는 지식의 중심, 책 읽는 안산 - 안산중앙도서관에 오신것을 환영합니다.">
+		</section>
+
+
+
+
+
+
+		<form name="goLibrary" id="goLibrary" method="get">
+				<input type="hidden" id="fn_seq" name="fn_seq" />
+				<input type="hidden" id="srcYear" name="srcYear" />
+				<input type="hidden" id="srcMonth" name="srcMonth" />
+				<input type="hidden" id="sitekey1" name="sitekey1" />
+				<input type="hidden" id="minisitekey" name="minisitekey" />
+				<input type="hidden" id="gwan1" name="gwan1" />
+				<input type="hidden" id="access" name="access" />
+		</form>
+		<form name="goBookList" id="goBookList" method="get">
+				<input type="hidden" id="bookSeq" name="bookSeq" />
+				<input type="hidden" id="sitekey4" name="sitekey4" />
+		</form>
+		<section class="section main_forms">
+			<h2 class="blind">로그인/검색</h2>
+			<!-- login -->
+			
+			<form name="loginForm" id="loginForm" method="post" class="main_login">
+				<input type="hidden" id="sitekey0" name="sitekey0"/>	
+				<input type="text" name="userid" value="" maxlength="20" placeholder="아이디" title="아이디" id="id">
+				<input type="password" name="password" value="" maxlength="20" placeholder="패스워드" title="패스워드" id="pw">
+				<button class="no_style" onclick="javascript:form_ck();">로그인</button>
+				<label for="keepId" class="fr"><input type="checkbox" name="keepId" id="keepId"> 아이디저장</label>
+				<p>
+					<a href="signup.do"><i class="icon_square"></i>회원가입</a>
+					<a href="passwordsearch.do"><i class="icon_square"></i>아이디/비밀번호 찾기</a>
+					<label for="chkSSL"><input type="checkbox" name="chkSSL" id="chkSSL" checked=checked> 보안접속</label>
+				</p>
+			</form>
+			
+			<!-- search -->
+			<form action="/detailDataSearchList.do" class="main_search" method="get" id="bookSearch" name="bookSearch">
+				<input type="hidden" id="sitekey2" name="sitekey2"/>
+				<input type="hidden" id="srcKind" name="srcKind" value="T"/>
+				<input type="hidden" id="iLibkey" name="iLibkey" value=""/>
+				<input type="hidden" id="libPart" name="libPart" value=""/>
+				<input type="hidden" id="page" name="page" value="1"/>
+				<input type="hidden" id="search_dt" name="search_dt" value=""/>
+				<input type="hidden" id="search_ft" name="search_ft" value=""/>
+				<input type="hidden" id="search_lt" name="search_lt" value=""/>
+				<input type="hidden" id="search_mt" name="search_mt" value=""/>
+				<input type="hidden" id="search_pyFrom" name="search_pyFrom" value=""/>
+				<input type="hidden" id="search_pyTo" name="search_pyTo" value=""/>
+				<input type="hidden" id="search_ut" name="search_ut" value=""/>
+				<input type="hidden" id="skey" name="skey" value=""/>
+				<div class="clear">
+					<input type="text"  name="srcWord" id="srcWord" style="ime-mode:active;" placeholder="책 이름을 검색해주세요!" title="책 이름을 검색해주세요!">
+					<button type="submit" class="icon_search" onclick="javascript:fnBookSrc();">검색</button>
+				</div>
+				<p class="t_right">※ 특수 문자는 인식되지 않습니다.</p>
+			</form>
+		</section>
+	</div>
+	<div class="col2_wrp m_col1_wrp clear">
+		<section class="section main_board">
+			<h2 class="blind">뉴스모음</h2>
+			<!-- Tab Toggle -->
+			<ul class="tab_tg tab_tg_vertical clear">
+				<li>
+					<a class="on" href="#b_notice">공지사항<i></i></a>
+					<div style="display:block;height: 173px;" id="b_notice">
+						<ul class="wgt_tmb">
+							<li class="more" style="overflow:hidden;padding-bottom:8px;"><a class="icon_more fr"  href="javascript:goMenu('notice.do');">공지사항 더보기</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35134');">2020 지역서점 바로대출제 운영 재개 알림(10/5 ~ )</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35110');">안산시 공공도서관 10월 상반기 추천도서</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35107');">소리괴물 이범재 작가님의 재미있는 그림책 이야기</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35101');">※관내서점대상※ 2020 하반기 「경기도 지역서점 인증(갱신)」 신청 접수 안내</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35089');">중앙도서관 추석 연휴 휴관일 안내</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35088');">안산시 도서관 안심예약대출 확대 운영 안내(9.23.(수)~)</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35067');">작은도서관(사이동꿈을키우는, 신길샛별) 위탁운영자 모집공고</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35062');">인산중앙도서관 온라인 작가와의 만남 [랜선 북(Book) 파티] 안내</a></li>
+							
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a href="#b_culture">문화강좌<i></i></a>
+					<div style="height: 173px;" id="b_culture">
+						<ul class="wgt_tmb">
+							<li class="more" style="overflow:hidden;padding-bottom:8px;"><a class="icon_more fr"  href="javascript:goMenu('culturalclass.do');">문화강좌 더보기</a></li>
+							
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">소리괴물 이범재 작가님의 재미있는 그림책 이야기</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[행사연기]샌드아트와 함께하는 이범재 작가와의 만남 [소리괴물]</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[잠정연기]시민문화교실 [아이와 행복한 그림책 읽기]</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[잠정연기]시민서평단 양성과정 - 심화반</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[잠정연기]시민서평단 양성과정 - 기초반</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[행사취소] 2020 겨울방학특강 [다 같이 더불어 살기]</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">[행사취소] 2020 인문학 열두 마당 ② 북튜버 겨울서점 - 유튜브 시대에 찾는 독서의 기쁨</a></li>
+								
+							<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);"  onclick="javascript:fnLectureDetail('1');">유설화 작가와의 만남 [잘했어, 쌍둥이 장갑]</a></li>
+								
+							
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a href="#b_compli">칭찬합시다<i></i></a>
+					<div style="height: 173px;" id="b_compli">
+						<ul class="wgt_tmb">
+							<li class="more" style="overflow:hidden;padding-bottom:8px;"><a class="icon_more fr"  href="javascript:goMenu('compliment.do');">칭찬합시다 게시글 더 보기</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('33900');">응원합니다</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('33263');">수암도서관 칭찬합니다</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('30898');">중앙도서관 너무 무서운거 아니에요?</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('30465');">열람실바닥청소</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('30373');">열두마당 강연 녹화 건의</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('30086');">무서워....서 못 가겠네....</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('29676');">그럴까?</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnComplimentDetail('29668');">너무도 칭찬을 합니다.</a></li>
+							
+						</ul>	
+					</div>
+				</li>
+				<li>
+					<a class="line2" href="#b_lib_notice" >관내도서관 <br>소식<i></i></a>
+					<div style="height: 173px;" id="b_lib_notice">
+						<ul class="wgt_tmb">
+							<li class="more" style="overflow:hidden;padding-bottom:8px;"><a class="icon_more fr"  href="javascript:goMenu('notice.do', 'Y');">관내도서관 소식 더보기</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35140', 'Y');">상록어린이도서관 추석연휴 휴관 안내 (9.30.수~10.4.일)</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35139', 'Y');">안산시 공공도서관 10월 상반기 추천도서</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35138', 'Y');">10월 부모학교 [미술심리테스트-아이 마음이 궁금하세요?]</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35137', 'Y');">안산시 도서관 추석 연휴 휴관 안내(9.30.~10.4.)</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35136', 'Y');">안산시도서관 추석연휴 휴관 안내</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35134', 'Y');">2020 지역서점 바로대출제 운영 재개 알림(10/5 ~ )</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35133', 'Y');">원고잔도서관 추석연휴 휴관 안내&lt;9.30.~10.4.&gt;</a></li>
+						
+						<li style="background: url(/images/main/main_list_bg.png) repeat-x; height: 30px;"><a class="ellipsis" href="javascript:void(0);" onclick="javascript:fnNoticeDetail('35132', 'Y');">대부도서관 추석연휴 휴관 안내(9.30.~10.4.)</a></li>
+							
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<section class="section fr">
+			<!-- 메인 퀵메뉴 A -->
+			<h2 class="blind">바로가기</h2>
+			<ul class="col4_wrp main_quick clear">
+				<li><a href="javascript:goMenu('culturalclass.do');"><img src="images/main/quick_02r.png" alt="문화강좌"></a></li>
+				<li><a href="javascript:goMenu('volunteerapply.do');"><img src="images/main/quick_05.png" alt="자원봉사"></a></li>
+				<li><a href="javascript:goMenu('lockerapply.do');"><img src="images/main/quick_06.png" alt="사물함신청"></a></li>
+				
+				<li>		
+				<a style="padding-top:0.1%;background:#a3cd04" href="javascript:goMenu('wishbookapply.do');"><img src="images/main/__quick_10.png" alt="희망도서신청"></a>
+				<a title="새 창으로 열림" href="javascript:baroloan('');"><img src="images/main/__quick_11.png" alt="지역서점바로대출"></a>				
+				</li>
+				
+				
+				<!-- 중앙 -->
+				<li><a href="http://seat.ansan.go.kr:8083/EZ5500/SEAT/RoomStatus_s3.aspx" target="_blank" title="새창으로 열림"><img src="images/main/quick_status.png" alt="열람실현황"></a></li>
+<!-- 				<li><a href="javascript:goMenu('libguide5.do');"  ><img src="images/main/lib_reserv.png" alt="열람실사전예약" /></a></li> -->
+				
+				
+				
+				<li><a title="새 창으로 열림" href="javascript:goDigitalLib()"><img src="images/main/quick_reservation.png" alt="디지털자료실예약"></a></li>
+				
+				
+				
+				<!--li><a href="javascript:alert('로그인 후 이용하여 주십시오.');" ><img src="images/main/quick_reservation.png" alt="디지털자료실예약"></a></li-->
+				<!--<li><a href="javascript:alert('로그인 후 이용하여 주십시오.');"><img src="images/main/quick_07.png" alt="전자책서비스"></a></li> -->
+				<li>
+				<a style="padding-top:0.1%;background:#a3cd04" href="javascript:alert('로그인 후 이용하여 주십시오.');"><img src="images/main/quick_13.png" alt="원문검색서비스 DBpia"></a>
+				<a href="javascript:alert('로그인 후 이용하여 주십시오.');"><img src="images/main/quick_14.png" alt="전자책서비스"></a>
+				</li>
+
+				
+				
+				
+				
+					<li><a title="새 창으로 열림" href="javascript:openImage();"><img src="images/main/__quick_09_1.png" alt="천 권 북챌린지"></a></li>
+				
+								
+			</ul>
+		</section>
+	</div>
+	<div class="main_ft clear">
+		<!-- 다른 도서관 -->
+		<section class="main_link">
+			 	<h2>안산시 공공도서관 바로가기</h2>
+				<!-- Tab Toggle -->
+				<ul class="col2_wrp tab_tg v2 tab_tg_horizon clear">
+					<li>
+						
+						<a  href="#go_lib01" >상록구<i></i></a>
+						<div id="go_lib01">
+						
+							<ul class="col2_wrp lst_type_bull clear">
+								<li><a href="javascript:goLibrary(4);">감골도서관</a></li>
+								<li><a href="javascript:goLibrary(3);">성포도서관</a></li>
+								<li><a href="javascript:goLibrary(5);">상록어린이도서관</a></li>
+								<li><a href="javascript:goLibrary(8);">부곡도서관</a></li>
+								<li><a href="javascript:goLibrary(14);">일동도서관</a></li>
+								<li><a href="javascript:goLibrary(24);">본오도서관</a></li>
+								<li><a href="javascript:goLibrary(33);">수암도서관</a></li>
+								<li><a href="javascript:goLibrary(34);">반월도서관</a></li>
+								<li><a href="javascript:goMinLibrary(15);">본오1동작은도서관</a></li>
+								<!-- <li><a href="javascript:goMinLibrary(9);">반월 햇빛작은도서관</a></li> -->
+								<li><a href="javascript:goMinLibrary(11);">사2동 꿈을키우는작은도서관</a></li>
+								<!--li><a href="javascript:goMinLibrary(18);">안산동 꿈을주는작은도서관</a></li-->
+								<li><a href="javascript:goMinLibrary(19);">본오3동 만화도서관</a></li>
+								<li><a href="javascript:goMinLibrary(20);">해양동 작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(16);">안산평생학습관작은도서관</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						
+						<a class="on" href="go_lib02">단원구<i></i></a>
+						<div style="display:block" id="go_lib02">
+						
+							<ul class="col2_wrp lst_type_bull clear">
+								<li><a href="javascript:goLibrary(1);">중앙도서관</a></li>
+								<li><a href="javascript:goLibrary(2);">관산도서관</a></li>
+								<li><a href="javascript:goLibrary(6);">단원어린이도서관</a></li>
+								<li><a href="javascript:goLibrary(21);">원고잔도서관</a></li>
+								<li><a href="javascript:goLibrary(28);">선부도서관</a></li>
+								<li><a href="javascript:goLibrary(30);">대부도서관</a></li>
+								<li><a href="javascript:goLibrary(31);">안산미디어라이브러리</a></li>
+								<li><a href="javascript:goMinLibrary(10);">안산다문화 작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(12);">신길샛별작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(13);">석수골작은도서관</a></li>
+								<!--li><a href="javascript:goMinLibrary(17);">초지작은도서관</a></li-->
+								<!--li><a href="javascript:goMinLibrary(22);">모두어린이도서관</a></li-->
+								<li><a href="javascript:goMinLibrary(23);">선녀마을작은도서관</a></li>
+								<!--li><a href="javascript:goMinLibrary(26);">근로복지작은도서관</a></li-->
+								<li><a href="javascript:goMinLibrary(25);">당곡작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(27);">와동별빛누리작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(31);">와동책읽는방작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(35);">달미작은도서관</a></li>
+								<li><a href="javascript:goMinLibrary(36);">신길작은도서관</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+		</section>
+<!-- -------------- 휴관일 표현 -------------------------------------- -->
+		<section class="main_holiday">
+			<h2>휴관일</h2>
+			<div class="main_holiday_srch t_center">
+				
+				<!-- <button type="button" class="icon_holiday_srch">검색</button> -->
+			</div>
+			<div class="main_holiday_hd t_center clear">
+				<button type="button" class="fl no_style" id="btn_before_mon" onclick="javascript:beforeMonthlyInfo();">&lt;<span class="blind">이전</span></button>
+				<button type="button" id="btn_next_mon"  class="fr no_style" onclick="javascript:nextMonthlyInfo();">&gt;<span class="blind">다음달</span></button>
+				<strong class="date">10</strong>
+				<span class="month">October</span>
+				<span class="year">2020</span>
+			</div>
+			<ul class="col3_wrp clear" aria-live="polite">
+				
+								<li><strong>1</strong></li>
+								
+								<li><strong>2</strong></li>
+								
+								<li><strong>3</strong></li>
+								
+								<li><strong>4</strong></li>
+								
+								<li><strong>9</strong></li>
+								
+								<li><strong>11</strong></li>
+								
+								<li><strong>18</strong></li>
+								
+								<li><strong>25</strong></li>
+								
+			</ul>
+			<p id="day-notice">※수도권 거리두기 2단계 상향에 따라<br>&nbsp;&nbsp; 2020.08.16.(일)~ 상황 안정시까지<br>&nbsp;&nbsp;일요일, 공휴일 휴관합니다.</p>
+			<p id="day-notice">※15개 공공도서관 : 안심예약대출 중<br> &nbsp;&nbsp;&nbsp;기타 작은도서관 : 운영 중단</p>
+		</section>
+		<!-- 이달의 추천도서 -->
+		<section class="main_book">
+			<div>
+				<h2>추천도서</h2>
+				<ul class="bxslider bxslider2">
+				
+					<li class="p2_slider">
+						<a href="javascript:goBook('0')"  class="book_area">
+						<span class="book_area">
+						<img src="/upload/sugbook/sugbook_20200824101842.png" alt="아름다운 것은 자꾸 생각나 -  책 표지 이미지">
+						</span>
+						</a>
+					</li>
+					
+					<li class="p2_slider">
+						<a href="javascript:goBook('1')"  class="book_area">
+						<span class="book_area">
+						<img src="/upload/sugbook/sugbook_20200824102050.png" alt="페인트 -  책 표지 이미지">
+						</span>
+						</a>
+					</li>
+					
+					<li class="p2_slider">
+						<a href="javascript:goBook('2')"  class="book_area">
+						<span class="book_area">
+						<img src="/upload/sugbook/sugbook_20200824102113.png" alt="빛의 과거 -  책 표지 이미지">
+						</span>
+						</a>
+					</li>
+					
+				
+				</ul>
+			</div>
+		</section>
+		<!-- 팝업존 -->
+		<section class="main_popup">
+			<h2>팝업존</h2>
+			<ul class="bxslider bxslider1">
+			
+				<li class="p_slider">
+					
+					<a href="#" onclick="javascript:popupGo('lib.ansan.go.kr/noticeP.do?page=1&amp;amp;sitekey2=1&amp;amp;fn_seq=34219&amp;amp;st=&amp;amp;sw=', '2');"  >
+					
+					<img src="/upload/popup/popup_20200602152237.jpg" alt="2020 안산의 책 독서감상작 전국공모전 팝업존 이미지" width="376" height="227">
+					
+					</a>
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<a href="#" onclick="javascript:popupGo('www.youtube.com/watch?v=poeFAN4ESAI', '1');"  title="새창으로열림"  >
+					
+					<img src="/upload/popup/popup_20200914112101.jpg" alt="온라인 가을독서교실 팝업존 이미지" width="376" height="227">
+					
+					</a>
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200925113339.png" alt="성포도서관 2020 독서의달 SNS이벤트 [우리는 독서가족] 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<a href="#" onclick="javascript:popupGo('lib.ansan.go.kr/noticeP.do?page=1&amp;sitekey2=2&amp;fn_seq=35104&amp;st=&amp;sw=', '1');"  title="새창으로열림"  >
+					
+					<img src="/upload/popup/popup_20200924130218.jpg" alt="비대면초등수업 팝업존 이미지" width="376" height="227">
+					
+					</a>
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200925113339.png" alt="성포도서관 2020 독서의달 SNS이벤트 [우리는 독서가족] 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<a href="#" onclick="javascript:popupGo('www.youtube.com/c/ansanlibrary', '1');"  title="새창으로열림"  >
+					
+					<img src="/upload/popup/popup_20200820162450.png" alt="책안보고뭐하니 팝업존 이미지" width="376" height="227">
+					
+					</a>
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200918112011.JPG" alt="온라인 작가와의 만남 [랜선 북 파티] 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200922152614.jpg" alt="안산시 도서관 안심예약대출 확대운영 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200929095656.JPG" alt="2020 지역서점 바로대출제 운영 재개 알림(10/5 ~ ) 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+				<li class="p_slider">
+					
+					<img src="/upload/popup/popup_20200924090305.png" alt="선부 할로윈 [할롣윈 스트링스] 팝업존 이미지" width="376" height="227">
+					
+				</li>
+				
+			
+			</ul>
+		</section>
+	</div>
+</div>
+<!-- //콘텐츠 끝 -->
+
+		</div>
+		<!-- //content -->
+	</div>
+	<!-- //container --> 
+	<!-- footer -->
+	
+	<script>
+		//전체주소
+		console.log("url 1 : "+$(location).attr('href'));
+
+		//http:, localhost:port번호, index.html ?test=tttt 순으로 나누어져 있습니다.
+		console.log("url 2 : "+$(location).attr('protocol')+"//"+$(location).attr('host')+""+$(location).attr('pathname')+""+$(location).attr('search'));
+	</script>
+	<div id="ft">
+		<!-- 링크 -->
+		<div class="ft_link">
+			<ul class="w1200 clear">
+				<li class="hide_w800"><a href="javascript:goMenu('email.do');">이메일추출방지정책</a></li>
+				<li><a class="color_ylw" href="javascript:goMenu('private.do');">개인정보처리방침</a></li>
+				<li><a href="javascript:goMenu('charter.do');">도서관행정서비스헌장</a></li>
+				<li><a class="color_ylw"  href="javascript:goMenu('charter2.do');">도서관윤리선언</a></li>
+				<li><a class="color_ylw hide_w800"  href="javascript:goMenu('intro.do');">한 눈에 보는 안산시 도서관</a></li>
+				<li class="to_top hide_w1024"><a href="#wrap" onClick="scrollMove('#wrap');return false;">TOP▲</a></li>
+			</ul>
+		</div>
+		<section class="ft_btm w1200 clear">
+			<!-- <h1 class="hide_w800">중앙도서관</h1> -->
+			
+			
+			<h2 class="hide_w800 f_logo ">중앙도서관</h2>
+			
+			<div class="ft_m_link t_center show_w800">
+				<a href="javascript:goLibraryWay('1');"><strong>찾아오시는 길</strong></a>
+			</div>
+			
+			
+			<p><strong>우편번호</strong> 15485 경기도 안산시 단원구 안산천남로 14 (고잔동) <wbr><strong>TEL</strong> : 031-481-2703 <strong>FAX</strong> : 031-481-3622</p>
+			<address>Copyright &copy; 2007 Ansan Joongang Library. All Rights Reserved.</address>
+			
+			<div id="familysite" class="tg_wrp hide_w800">
+				<label for="family_list" class="blind">관련사이트</label>
+				<select name="family_list" id="family_list" title="관련사이트">
+				<option value="">관련사이트</option>
+				<option value="http://www.dlibrary.go.kr">국가전자도서관</option>
+				<option value="http://www.dibrary.net">디브러리</option>
+				</select>
+				<a title="새창으로 열기" class="btn_family" href="#" onclick="moveSite('family_list');return false;">이동</a>
+				<script type="text/javascript">
+				//<![CDATA[
+				// 새창 이동
+				function moveSite(selId) {
+					if(selId == null || selId == '' || $.trim($('#'+selId).val()) == '') {
+						alert('항목을 선택하세요.');
+						$('#'+selId).focus();
+						return ;
+					} else {
+						window.open($('#'+selId).val(), "_blank");
+					}
+				}
+				//]]>
+				</script>
+			</div>
+			<div class="web_access_mark"><a href="http://www.webwatch.or.kr/Situation/WA_Situation.html?MenuCD=110" title="새창" target="_blank"><img src="/images/web_accessibility.png?v=2" border="0" alt="과학기술정보통신부 WEB ACCESSIBILITY 마크(웹 접근성 품질인증 마크)" title="국가 공인 인증기관 : 웹와치" /></a></div>
+		</section>
+	</div>
+	<script>
+		$(document).ready(function(){
+			//본문으로바로가기 수정 (페이지가 많아서 자바스크립트로 처리)
+			var skipToContent = $("a[href='#container']").attr('onclick', '').attr('href', '#ct').text('본문바로가기');
+
+			//메뉴바로가기
+			var skipToMenu = $("<a href='#gnb' class='skip'>주메뉴바로가기</a>");
+
+			//사이드메뉴 바로가기
+			var skipToLeftMenu = $("<a href='#lnb' class='skip'>사이드메뉴바로가기</a>");
+			if($("#lnb").length > 0 ){
+				$("#lnb").attr('tabIndex', '0');
+				$("body").prepend(skipToLeftMenu);
+			}
+			$("body").prepend(skipToMenu);
+			$("body").prepend(skipToContent);
+			$("#ct, #gnb").attr('tabIndex', '0');
+		});
+
+	</script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-49302400-2', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+</div>
+
+<!-- js --> 
+<script src="/js/imagesloaded.pkgd.min.js"></script> 
+<script src="/js/jquery.bxslider.min.js"></script> 
+<script src="/js/common.js?v=181121_1"></script>
+<script src="/js/MD5.js?v=1"></script>
+<script src="/js/common_util.js"></script>
+
+<script type="text/javascript">
+function getCookie(name){
+	name=name+'=';
+	var tmp = document.cookie;
+	var sidx = tmp.indexOf(name);
+	if(sidx == -1) return '';
+	sidx = sidx + name.length;
+	var eidx = tmp.indexOf(';', sidx);
+	if(eidx == -1)eidx = tmp.length;
+	return unescape(tmp.substring(sidx, eidx));
+}
+
+function getTimeStamp(s1) {
+	//현재시간 구하기
+	var d = new Date();
+	
+	if (s1 == 1) {
+		// 20080301103025 표현식
+		var s =
+		leadingZeros(d.getFullYear(), 4) +
+		leadingZeros(d.getMonth() + 1, 2) +
+		leadingZeros(d.getDate(), 2) +
+		
+		leadingZeros(d.getHours(), 2) +
+		leadingZeros(d.getMinutes(), 2) +
+		leadingZeros(d.getSeconds(), 2);
+	}else {
+		// 2008-03-01 10:30:25 표현식
+		var s =
+		leadingZeros(d.getFullYear(), 4) + '-' +
+		leadingZeros(d.getMonth() + 1, 2) + '-' +
+		leadingZeros(d.getDate(), 2) + ' ' +
+		
+		leadingZeros(d.getHours(), 2) + ':' +
+		leadingZeros(d.getMinutes(), 2) + ':' +
+		leadingZeros(d.getSeconds(), 2);
+	}
+	return s;
+}
+
+function leadingZeros(n, digits) {
+	// 1 -> 01 과 같이 변경하기
+	var zero = '';
+	n = n.toString();
+	
+	if (n.length < digits) {
+		for (i = 0; i < digits - n.length; i++)
+		zero += '0';
+	}
+	return zero + n;
+}
+
+//전체팝업추가(height 30px)추가
+if ( getCookie( "20_0508_1" ) != "no" && getTimeStamp(1) <= "202101312359" ) 
+{
+	popWindow  = window.open('popup/20_0508_1.html','20_0508_1','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=350,height=525,left=0,top=0');
+	popWindow.opener = self; 
+}
+
+//도서관 전면 휴관
+//if ( getCookie( "20_0815" ) != "no" && getTimeStamp(1) <= "202009302359" ) 
+//{
+//	popWindow  = window.open('popup/20_0815.html','20_0815','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=450,height=660,left=550,top=0');
+//	popWindow.opener = self; 
+//}
+//안심예약대출
+if ( getCookie( "20_0922" ) != "no"  ) 
+{
+	popWindow  = window.open('popup/20_0819.html','20_0922','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=700,left=800,top=0');
+	popWindow.opener = self; 
+}
+
+function popupGo(url, type){
+	console.log(url + ' / ' + type);
+	if(url != null && url != '' && url !='null'){
+	url = url.replace(/amp;/g, '');
+		if(type == '1'){
+			window.open('http://'+url, '_blank');
+		}else{
+			location.href = 'http://'+url;
+		}
+	}
+}
+
+function openImage(){
+	window.open('popupImage.html?v=1','천권북챌린지','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=600,height=920,left=0,top=0');
+}
+function openImage2(){
+	window.open('popuppage/popupImage.html','전자저널 DBpia','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=395,height=400,left=0,top=0');
+}
+
+if('' != '' ){
+	if('' == 'err3' ){
+		alert("세션이 만료되어 로그아웃 되었습니다. 로그인 후 재신청 바랍니다.");
+	}
+	
+}
+
+
+</script>
+
+</body>
+</html>
