@@ -66,8 +66,8 @@ function getter(url) {
             })
             fs.writeFileSync(path.join(dir, `/scripts/script[${scIdx}].js`), cont, {encoding: "utf-8"});
             // console.log(htmlData.includes(scriptLocARRS.cngCont[scIdx]));
-            htmlData = htmlData.replace(scriptLocARRS.cngCont[scIdx], `<script src="./scripts/script[${scIdx}].js"></script>`);
-            console.log(!htmlData.includes(scriptLocARRS.cngCont[scIdx]) ? `Script Modified: [${scIdx}]` : `Script NOT Modified: [${scIdx}]`);
+            // htmlData = htmlData.replace(scriptLocARRS.cngCont[scIdx], `<script src="./scripts/script[${scIdx}].js"></script>`);
+            // console.log(!htmlData.includes(scriptLocARRS.cngCont[scIdx]) ? `Script Modified: [${scIdx}]` : `Script NOT Modified: [${scIdx}]`);
         }
         
         function scriptDownload(scriptURL, scIdx, dir, orgDomain, scriptLocARRS) {
@@ -76,8 +76,8 @@ function getter(url) {
             .then(({data}) => {
                 fs.appendFileSync(path.join(dir, `/scripts/script[${scIdx}].js`), data, {encoding: "utf-8"});
                 // console.log(htmlData.includes(scriptLocARRS.cngCont[scIdx]));
-                htmlData = htmlData.replace(scriptLocARRS.cngCont[scIdx], `<script src="./scripts/script[${scIdx}].js"></script>`);
-                console.log(!htmlData.includes(scriptLocARRS.cngCont[scIdx]) ? `Script Modified: [${scIdx}] || DEPENDENCIES TAG` : `Script NOT Modified: [${scIdx}] || DEPENDENCIES TAG`);
+                // htmlData = htmlData.replace(scriptLocARRS.cngCont[scIdx], `<script src="./scripts/script[${scIdx}].js"></script>`);
+                // console.log(!htmlData.includes(scriptLocARRS.cngCont[scIdx]) ? `Script Modified: [${scIdx}] || DEPENDENCIES TAG` : `Script NOT Modified: [${scIdx}] || DEPENDENCIES TAG`);
             })
             .catch((e) => {console.error(`ERR: ${scriptURL} || BASEURL: ${baseDMN} || SEND: ${`${orgDomain.split("/")[0]}://${baseDMN}${scriptURL}`}`)});
         }
@@ -104,9 +104,9 @@ function getter(url) {
 
         cngCont.forEach((value, index) => {
             if (htmlData.includes(value)) {
-                console.log(`Script Failed: ${index}`);
+                console.log(`Script CHANGE TRY: ${index}`);
                 htmlData = htmlData.replace(value, `<script src="./scripts/script[${index}].js"></script>`);
-                console.log(htmlData.includes(value));
+                console.log(!htmlData.includes(value) ? "SUCCESS" : "FAIED");
             }
         })
         fs.writeFileSync(path.join(crawlDir, time, `/${filename}.html`), htmlData, {encoding: 'utf-8'});
