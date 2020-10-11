@@ -1,0 +1,13 @@
+/*
+
+Base URL: https://fonts.googleapis.com/css?family=Dosis:500&text=Vue.js&display=swap || stylesheet sequence: [1]
+
+*/
+
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/l/font?kit=HhyJU5sn9vOmLxNkIwRSjTVNWLEJBbMV3AEHaPl5VMuS&skey=91e90d677384bade&v=v18) format('truetype');
+}

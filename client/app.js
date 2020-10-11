@@ -50,8 +50,8 @@ function scriptReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
             }
         }
 
-        console.log(tagStartPointSEC.length);
-        console.log(tagEndPointSEC.length);
+        // console.log(tagStartPointSEC.length);
+        // console.log(tagEndPointSEC.length);
 
         // script tag location find
         let lstIdxA = 0;
@@ -97,7 +97,7 @@ function scriptReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
             cnt++;
         }
 
-        console.log(ignIdx);
+        // console.log(ignIdx);
 
         let scriptEndCnt = 0;
 
@@ -180,8 +180,8 @@ function scriptReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
 
         for (var idx = 0; idx < scripts.length; idx++) {
             var script = scripts[idx];
-            console.log(idx);
-            console.log(`${tagStartPoint.length} || ${scripts.length}`);
+            // console.log(idx);
+            // console.log(`${tagStartPoint.length} || ${scripts.length}`);
             if (!script.attribs.src) {
                 // text script
                 scriptSave(script, idx, path.join(crawlDir, time), {tagStartPoint, tagEndPoint, cngCont});
@@ -276,7 +276,7 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
             let relInfo = data.indexOf("rel=", searchRESA);
             if (relInfo > searchRESB) continue;
             else if (data.substr(relInfo+5,3) != "sty") {
-                console.log(data.substr(relInfo+5,3));
+                // console.log(data.substr(relInfo+5,3));
                 continue;
             }
             else {
@@ -302,8 +302,8 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
             }
         }
 
-        console.log(ignIdx);
-        console.log(tagStartPoint);
+        // console.log(ignIdx);
+        // console.log(tagStartPoint);
 
         let stylesheetEndCnt = 0;
 
@@ -311,7 +311,7 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
             let cont = "";
             stylesheetObj.children.forEach((val, idx) => {
                 if (val.type == "text") (cont =="") ? (cont += val.data) : (cont += "\n" + val.data);
-                else console.log(val);
+                // else console.log(val);
             })
             try {
                 fs.writeFileSync(path.join(dir, `/stylesheets/stylesheet[${scIdx}].css`), `/*\n\nHTML-WRITTEN FILE || stylesheet sequence: [${scIdx}]\n\n*/\n\n` + cont, {encoding: "utf-8"});
@@ -358,10 +358,11 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
                 let data = dataB.data;
                 // console.log(data);
                 const realSaveLoc = path.join(dir, `/stylesheets`, (saveLoc[saveLoc.length-1] == "/" ? saveLoc.slice(0, -1) : saveLoc));
-                
+                console.log(`realSaveLoc: ${realSaveLoc}`);
                 // check @import
 
                 let importFIdx = 0;
+                // console.log(stylesheetURL);
 
                 while(true) {
                     let searchRes = data.indexOf("@import", importFIdx);
@@ -370,11 +371,19 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
                     if(searchRes == -1) break;
                     else {
                         let urlExt = data.slice(searchResSP+1, searchResEP);
-                        let importStylesheetURL = path.join(stylesheetURL, urlExt);
+                        // console.log(`--------------`);
+                        // console.log(stylesheetURL);
+                        let parentSub = stylesheetURL.split("/").pop();
+                        // console.log(stylesheetURL.replace(parentSub, ""));
+                        let importStylesheetURL = path.join(stylesheetURL.replace(parentSub, ""), urlExt);
                         importFIdx = searchRes+9;
                         // console.log(orgDomain.split("/")[0]);
                         let importLocExtSpliter = importStylesheetURL.split("/");
-                        stylesheetDownload(importStylesheetURL[0] == "/" ? importStylesheetURL : "/" + importStylesheetURL, scIdx, path.join(dir, `/stylesheets`, (importLocExtSpliter.pop() == "/" ? importStylesheetURL.replace(importLocExtSpliter.pop(), "") : importLocExtSpliter)), orgDomain, stylesheetLocARRS, urlExt.split("/").pop());
+                        console.log(dir);
+                        console.log(importLocExtSpliter.pop());
+                        console.log(importStylesheetURL);
+                        console.log(path.join(dir, `/stylesheets`, (importLocExtSpliter.pop() == "/" ? importStylesheetURL.replace(importLocExtSpliter.pop(), "") : importLocExtSpliter)));
+                        // stylesheetDownload(importStylesheetURL[0] == "/" ? importStylesheetURL : "/" + importStylesheetURL, scIdx, path.join(dir, `/stylesheets`, (importLocExtSpliter.pop() == "/" ? importStylesheetURL.replace(importLocExtSpliter.pop(), "") : importLocExtSpliter)), orgDomain, stylesheetLocARRS, urlExt.split("/").pop());
                         // data.replace(data.slice(searchRes, searchResEP), `@import '${}'`)
                     }
                 }
@@ -384,7 +393,10 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
                 // check @import
 
                 try {
-                    console.log(!fs.existsSync(realSaveLoc));
+                    // if (filename) {
+                    //     console.log(filename);
+                    //     console.log(!fs.existsSync(realSaveLoc));
+                    // }
                     if (!fs.existsSync(realSaveLoc)) {
                         // console.log(`make new directory: ${realSaveLoc}`);
                         // fs.mkdirSync(realSaveLoc);
@@ -397,23 +409,24 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
                                 if (!fs.existsSync(extLoc)) fs.mkdirSync(extLoc);
                             }
                         })
-                        console.log(`make new directory: ${fs.existsSync(realSaveLoc) ? "success" : "failed"}`);
+                        // console.log(`make new directory: ${fs.existsSync(realSaveLoc) ? "success" : "failed"}`);
                     }
                     setTimeout(() => {
-                        console.log(`stylesheet: [${scIdx}] save route: ${realSaveLoc}`);
+                        // console.log(`stylesheet: [${scIdx}] save route: ${realSaveLoc}`);
+                        // console.log(`stylesheet: [${scIdx}] save try: ${path.join(realSaveLoc, `${filename ? filename : `/stylesheet_typeA[${scIdx}].css`}`)}`);
                         fs.appendFileSync(path.join(realSaveLoc, `${filename ? filename : `/stylesheet_typeA[${scIdx}].css`}`), `/*\n\nBase URL: ${stylesheetURL} || stylesheet sequence: [${scIdx}]\n\n*/\n\n` + data, {encoding: "utf-8"});
                     }, 100);
                 } catch(e) {
                     console.error(`stylesheet Save Error: [${scIdx}] - ${e}`);
                 }
-                console.log(`Progressing stylesheet Sequence: ${scIdx} || willChange: ${!ignIdx.includes(scIdx)}`);
+                // console.log(`Progressing stylesheet Sequence: ${scIdx} || willChange: ${!ignIdx.includes(scIdx)}`);
                 // if (!ignIdx.includes(scIdx)) {
                     // console.log(htmlData.includes(stylesheetLocARRS.cngCont[scIdx]));
                     if (!filename) htmlData = htmlData.replace(stylesheetLocARRS.cngCont[scIdx], `<link rel="stylesheet" href=".${path.join("/stylesheets/", saveLoc)}/stylesheet_typeA[${scIdx}].css"/>`);
                     // console.log(`<stylesheet src="./stylesheets/stylesheet[${scIdx}].js"></stylesheet>: ` + htmlData.includes(`<stylesheet src="./stylesheets/stylesheet[${scIdx}].js"></stylesheet>`));
                     // console.log(!htmlData.includes(stylesheetLocARRS.cngCont[scIdx]) ? `stylesheet Modified: [${scIdx}] || DEPENDENCIES TAG` : `stylesheet NOT Modified: [${scIdx}] || DEPENDENCIES TAG`);
                     stylesheetEndCnt++;
-                    console.log(`stylesheetEndCnt: ${stylesheetEndCnt}`);
+                    // console.log(`stylesheetEndCnt: ${stylesheetEndCnt}`);
                 // } else {
                 //     stylesheetEndCnt++;
                 //     console.log(`stylesheetEndCnt: ${stylesheetEndCnt}`);
@@ -424,12 +437,13 @@ function stylesheetReplacer(htmlDataO, data, url, crawlDir, time, $Main) {
                 stylesheetEndCnt++;
                 console.log(`stylesheetEndCnt: ${stylesheetEndCnt}`);
                 console.error(`ERR: ${stylesheetURL} || BASEURL: ${baseDMN} || SEND: ${`${orgDomain.split("/")[0]}//${baseDMN}${stylesheetURL}`} ==> ${e}`)
+                // throw e;
             });
         }
 
 
         for (var idx = 0; idx < tagStartPoint.length; idx++) {
-            console.log(idx);
+            // console.log(idx);
             var stylesheet = stylesheets[idx];
             if (!stylesheet.attribs.href) {
                 // text stylesheet
@@ -662,12 +676,18 @@ function getter(urlB) {
         async.waterfall([
             (cb) => {
                 scriptReplacer(htmlData, data, url, crawlDir, time, $Main)
-                .then((htmlDataCNG) => cb(null, htmlDataCNG))
+                .then((htmlDataCNG) => {
+                    console.log(`\n\n\n--|Script: END|--\n\n\n`);
+                    cb(null, htmlDataCNG)    
+                })
                 .catch(e => cb(e));
             },
             (htmlDataC, cb) => {
                 stylesheetReplacer(htmlDataC, data, url, crawlDir, time, $Main)
-                .then((htmlDataCNG) => cb(null, htmlDataCNG))
+                .then((htmlDataCNG) => {
+                    console.log(`\n\n\n--|Stylesheet: END|--\n\n\n`);
+                    cb(null, htmlDataCNG);
+                })
                 .catch(e => cb(e));
             }
             // (htmlDataC, cb) => {
